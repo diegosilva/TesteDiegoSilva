@@ -11,7 +11,7 @@ namespace Walmart.Data
 {
     public class EstadoDAO : DataDAO
     {
-        private static Func<IDataReader, Estado> Make = reader => new Estado()
+        private static Func<IDataReader, Estado> drEstado = reader => new Estado()
         {
             Codigo = Convert.ToInt32(reader["Codigo"]),
             Nome = reader["nome"].ToString(),
@@ -36,7 +36,6 @@ namespace Walmart.Data
                     command.Parameters.AddWithValue("@Sigla", prEstado.Sigla);
                     command.Parameters.AddWithValue("@Regiao", prEstado.Regiao);
                     command.ExecuteNonQuery();
-                    conn.Close();
                 }
             }
             catch (Exception ex)
@@ -59,7 +58,7 @@ namespace Walmart.Data
                     SqlDataReader dr = command.ExecuteReader();
                     while (dr.Read())
                     {
-                        lstEstados.Add(Make(dr));
+                        lstEstados.Add(drEstado(dr));
                     }
 
                     return lstEstados;
@@ -84,7 +83,7 @@ namespace Walmart.Data
                     SqlDataReader dr = command.ExecuteReader();
                     Estado estado = null;
                     if (dr.Read())
-                        estado = Make(dr);
+                        estado = drEstado(dr);
                     
                     return estado;
                 }

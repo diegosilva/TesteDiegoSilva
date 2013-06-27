@@ -12,7 +12,7 @@ namespace Walmart.Data
 {
     public class CidadeDAO : DataDAO
     {
-        private static Func<IDataReader, Cidade> Make = reader => new Cidade()
+        private static Func<IDataReader, Cidade> drCidade = reader => new Cidade()
         {
             Codigo = Convert.ToInt32(reader["Codigo"]),
             Nome = reader["nome"].ToString(),
@@ -70,7 +70,7 @@ namespace Walmart.Data
                     SqlDataReader dr = command.ExecuteReader();
                     while (dr.Read())
                     {
-                        lst.Add(Make(dr));
+                        lst.Add(drCidade(dr));
                     }
                     return lst;
                 }
@@ -95,7 +95,7 @@ namespace Walmart.Data
                     SqlDataReader dr = command.ExecuteReader();
                     Cidade cidade = null;
                     if (dr.Read())
-                        cidade = Make(dr);
+                        cidade = drCidade(dr);
                     return cidade;
                 }
             }
