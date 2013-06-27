@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Walmart.Entity.Estado>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section JavaScript{
+    <script type="text/javascript" language="javascript">
+        function Delete(id) {
+            confirm("Excluir Registro?", function(result){
+            if(result){
+                $.ajax({
+                    url:"@Url.Action("Delete", "Estados")",
+                    data: {codigo:id},
+                    type:"POST",
+                    datatype:"json",
+                    error:function(data){
+                            if(data.responseText.indexOf("CIDADE")!==-1)
+                                alert("Cidade relacionado a algum Estado, impossível excluir");
+                            else
+                                alert("Erro");
+                            },
+                    success:function(data){
+                            window.location.href="@Url.Action("Index", "Estados")";
+                            }                        
+
+                    });
+                }
+            });
+        }
+    </script>
+}
+<h2>
+    Estados</h2>
+<p>
+    @Html.ActionLink("Criar Novo Estado", "Novo")
+</p>
+<table >
+    <tr>
+        <th>
+            País
+        </th>
+        <th>
+            Nome
+        </th>
+        <th>
+            Sigla
+        </th>
+        <th>
+            Região
+        </th>
+        <th>
+        </th>
+    </tr>
+    @{var odd = true;}
+    @foreach (var item in Model)
+    {
+        <tr >
+            <td>
+                @Html.DisplayFor(modelItem => item.Pais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sigla)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Regiao)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Editar", new { codigo = item.Codigo }) | <a href="javascript:Delete(@item.Codigo)">
+                    Delete </a>
+            </td>
+        </tr>
+        odd = !odd;
+    }
+</table>

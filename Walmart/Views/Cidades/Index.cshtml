@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Walmart.Entity.Cidade>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section JavaScript{
+    <script type="text/javascript" language="javascript">
+        function Delete(id) {
+            confirm("Excluir registro ?", function(result){
+            if(result){
+                $.ajax({
+                    url:"@Url.Action("Delete", "Cidades")",
+                    data: {codigo:id},
+                    type:"POST",
+                    datatype:"json",
+                    error:function(data){                            
+                                alert("Erro");
+                            },
+                    success:function(data){
+                            window.location.href="@Url.Action("Index", "Cidades")";
+                            }                        
+
+                    });
+                }
+            });
+        }
+    </script>
+}
+<h2>
+    Cidades</h2>
+<p>
+    @Html.ActionLink("Criar Nova Cidade", "Novo")
+</p>
+<table >
+    <tr>
+        <th>
+            Nome
+        </th>
+        <th>
+            Capital
+        </th>
+        <th>
+            Estado
+        </th>
+        <th>
+        </th>
+    </tr>
+    @{var odd = true;}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @(item.Capital ? "Sim" : "Não")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado.Nome)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Editar", new { codigo = item.Codigo }) | <a href="javascript:Delete(@item.Codigo)">
+                    Delete </a>| @Html.ActionLink("Detalhes", "Detalhes", new { codigo = item.Codigo })
+            </td>
+        </tr>
+        odd = !odd;
+    }
+</table>
